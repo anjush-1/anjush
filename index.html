@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Be My Valentine ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Floating hearts background -->
+<div class="hearts"></div>
+
+<!-- Hidden YouTube music -->
+<iframe
+  id="music"
+  src=""
+  allow="autoplay"
+  style="display:none;">
+</iframe>
+
+<!-- STEP 1 -->
+<div class="container" id="step1">
+  <h1>LOB LOB</h1>
+  <p>kisssss pls continue hehe</p>
+  <button onclick="nextStep()">Continue ➜</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="container hidden" id="step2">
+  <h1>HI cutie baby</h1>
+  <p>Will you be my Valentine?</p>
+
+  <div class="buttons">
+    <button id="yesBtn" onclick="yesClicked()">YES 💖</button>
+    <button id="noBtn" onmouseover="moveNo()">NO 😒</button>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="container hidden" id="step3">
+  <h1>YAYYYYY 💃💖</h1>
+  <p>I can’t help falling in love with you.</p>
+  <p>Happy Valentine’s Day 💘</p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
