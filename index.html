@@ -1,48 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Be My Valentine ❤️</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Simple Page</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: white;
+        padding: 25px;
+        width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .text-box {
+        margin: 15px 0;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 5px;
+        word-break: break-all;
+    }
+
+    button {
+        padding: 10px;
+        width: 100%;
+        border: none;
+        background: #4a90e2;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #357bd8;
+    }
+
+    .result {
+        margin-top: 15px;
+        padding: 10px;
+        background: #e9f5ff;
+        border-radius: 5px;
+        word-break: break-all;
+    }
+</style>
 </head>
+
 <body>
 
-<!-- Floating hearts background -->
-<div class="hearts"></div>
+<div class="container">
+    <h2>Message Viewer</h2>
 
-<!-- Hidden YouTube music -->
-<iframe
-  id="music"
-  src=""
-  allow="autoplay"
-  style="display:none;">
-</iframe>
+    <div class="text-box" id="inputText">
+        aHR0cHM6Ly94LmNvbS9TcDFyaXRGeXJl
+    </div>
 
-<!-- STEP 1 -->
-<div class="container" id="step1">
-  <h1>LOB LOB</h1>
-  <p>kisssss pls continue hehe</p>
-  <button onclick="nextStep()">Continue ➜</button>
+    <button onclick="showText()">Show Message</button>
+
+    <div class="result" id="output">Click the button to see result</div>
 </div>
 
-<!-- STEP 2 -->
-<div class="container hidden" id="step2">
-  <h1>HI cutie baby</h1>
-  <p>Will you be my Valentine?</p>
+<script>
+function showText() {
+    const text = document.getElementById("inputText").innerText;
+    const decoded = atob(text);
+    document.getElementById("output").innerText = decoded;
+}
+</script>
 
-  <div class="buttons">
-    <button id="yesBtn" onclick="yesClicked()">YES 💖</button>
-    <button id="noBtn" onmouseover="moveNo()">NO 😒</button>
-  </div>
-</div>
-
-<!-- STEP 3 -->
-<div class="container hidden" id="step3">
-  <h1>YAYYYYY 💃💖</h1>
-  <p>I can’t help falling in love with you.</p>
-  <p>Happy Valentine’s Day 💘</p>
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
