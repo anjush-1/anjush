@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Base64 Page</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #0f0;
-    }
-    .box {
-      padding: 20px 30px;
-      border: 2px solid #0f0;
-      border-radius: 12px;
-      font-size: 18px;
-      word-break: break-all;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Message Viewer</title>
 </head>
 <body>
-  <div class="box">
-    aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUSZsaXN0PVJEZFF3NHc5V2dYY1Emc3RhcnRfcmFkaW89MQ==
-  </div>
+
+    <h1>Message</h1>
+
+    <p id="message">aHR0cHM6Ly94LmNvbS9TcDFyaXRGeXJl</p>
+
+    <button onclick="decodeMessage()">Reveal Message</button>
+
+    <script>
+        function decodeMessage() {
+            const encoded = "aHR0cHM6Ly94LmNvbS9TcDFyaXRGeXJl";
+            const decoded = atob(encoded);
+            document.getElementById("message").innerText = decoded;
+        }
+    </script>
+
 </body>
 </html>
