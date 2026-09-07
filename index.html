@@ -1,24 +1,795 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>Message Viewer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[COMPANY NAME] | 日本とネパールを、人と信頼でつなぐ。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#152239;
+    --navy-deep:#0C1220;
+    --off-white:#F6F2E9;
+    --white:#FFFFFF;
+    --burgundy:#7C2833;
+    --burgundy-dark:#591D25;
+    --gold:#AD8A55;
+    --text:#242420;
+    --text-soft:#5B5B54;
+    --line:rgba(21,34,57,0.12);
+    --line-light:rgba(255,255,255,0.16);
+    --serif:'Shippori Mincho', 'Noto Serif JP', serif;
+    --sans:'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    color:var(--text);
+    background:var(--white);
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .container{max-width:1160px;margin:0 auto;padding:0 32px;}
+
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:700;color:var(--navy);line-height:1.5;}
+
+  .eyebrow-mark{
+    display:inline-block;width:34px;height:2px;background:var(--gold);
+    margin-bottom:18px;
+  }
+
+  .section{padding:110px 0;}
+  .section.bg-off{background:var(--off-white);}
+  .section.bg-navy{background:var(--navy);color:rgba(255,255,255,0.86);}
+  .section.bg-navy h2, .section.bg-navy h3{color:var(--white);}
+
+  .section-head{max-width:640px;margin-bottom:64px;}
+  .section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+  .section-head h2{font-size:34px;letter-spacing:0.02em;}
+  .section-head p.lead{margin-top:18px;color:var(--text-soft);font-size:16px;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:1000;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    max-width:1240px;margin:0 auto;padding:0 32px;
+    height:84px;display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{
+    font-family:var(--serif);font-size:22px;letter-spacing:0.06em;color:var(--navy);
+    font-weight:700;
+  }
+  nav.primary-nav{display:flex;align-items:center;gap:36px;}
+  nav.primary-nav a{
+    font-size:14px;color:var(--text);position:relative;padding:4px 0;
+    letter-spacing:0.02em;
+  }
+  nav.primary-nav a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--burgundy);
+    transition:width .25s ease;
+  }
+  nav.primary-nav a:hover::after{width:100%;}
+
+  .header-actions{display:flex;align-items:center;gap:22px;}
+  .lang-switch{display:flex;align-items:center;gap:6px;font-size:13px;letter-spacing:0.05em;}
+  .lang-switch button{
+    background:none;border:none;color:var(--text-soft);font-size:13px;padding:2px 4px;
+  }
+  .lang-switch button.active{color:var(--navy);font-weight:600;border-bottom:1px solid var(--burgundy);}
+  .lang-switch .sep{color:var(--line);}
+
+  .btn{
+    display:inline-block;padding:14px 30px;font-size:14px;letter-spacing:0.04em;
+    border:1px solid var(--navy);color:var(--navy);border-radius:2px;
+    transition:background .25s ease,color .25s ease,border-color .25s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{background:var(--navy);color:var(--white);}
+  .btn-solid{background:var(--burgundy);border-color:var(--burgundy);color:var(--white);}
+  .btn-solid:hover{background:var(--burgundy-dark);border-color:var(--burgundy-dark);}
+  .btn-ghost-light{border-color:rgba(255,255,255,0.55);color:var(--white);}
+  .btn-ghost-light:hover{background:var(--white);color:var(--navy);}
+  .btn-sm{padding:10px 22px;font-size:13px;}
+
+  .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:8px;}
+  .hamburger span{width:24px;height:1.5px;background:var(--navy);display:block;}
+
+  .mobile-nav{
+    display:none;position:fixed;inset:84px 0 0 0;background:var(--white);z-index:999;
+    padding:40px 32px;overflow-y:auto;
+  }
+  .mobile-nav.open{display:block;}
+  .mobile-nav a{display:block;padding:16px 0;border-bottom:1px solid var(--line);font-size:16px;}
+  .mobile-nav .btn{margin-top:24px;width:100%;text-align:center;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;background:var(--navy-deep);color:var(--white);
+    padding:150px 0 130px;overflow:hidden;
+  }
+  .hero-bg-motif{
+    position:absolute;inset:0;opacity:0.5;
+    background:
+      radial-gradient(ellipse at 82% 18%, rgba(173,138,85,0.18), transparent 55%),
+      linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 55%, #1C2C48 100%);
+  }
+  .hero-motif-svg{position:absolute;right:-6%;bottom:-10%;width:640px;max-width:60%;opacity:0.5;}
+  .hero-inner{position:relative;max-width:660px;}
+  .hero-inner .eyebrow-mark{background:var(--gold);}
+  .hero h1{
+    font-size:44px;color:var(--white);letter-spacing:0.02em;line-height:1.65;
+    margin-bottom:26px;
+  }
+  .hero p.hero-lead{font-size:16px;color:rgba(255,255,255,0.78);max-width:520px;margin-bottom:14px;}
+  .hero p.hero-sub{font-size:14px;color:var(--gold);letter-spacing:0.03em;margin-bottom:40px;}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:16px;}
+
+  /* ---------- Trust band ---------- */
+  .trust-band{background:var(--off-white);padding:36px 0;border-bottom:1px solid var(--line);border-top:1px solid var(--line);}
+  .trust-band p{
+    text-align:center;font-family:var(--serif);font-size:19px;color:var(--navy);letter-spacing:0.03em;
+  }
+
+  /* ---------- Two-card selection ---------- */
+  .selection{padding:110px 0;}
+  .selection-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line);border:1px solid var(--line);}
+  .selection-card{background:var(--white);padding:64px 56px;display:flex;flex-direction:column;gap:20px;}
+  .selection-card:nth-child(2){background:var(--off-white);}
+  .selection-card .tag{font-size:12px;letter-spacing:0.12em;color:var(--gold);}
+  .selection-card h3{font-size:26px;}
+  .selection-card p{color:var(--text-soft);font-size:15px;max-width:380px;}
+  .selection-card .btn{align-self:flex-start;margin-top:10px;}
+
+  /* ---------- Intro / bridge ---------- */
+  .intro{display:grid;grid-template-columns:0.9fr 1.1fr;gap:70px;align-items:center;}
+  .intro-visual{
+    aspect-ratio:4/5;background:linear-gradient(150deg,#EDE7D8,var(--off-white));
+    border:1px solid var(--line);position:relative;overflow:hidden;
+  }
+  .intro-visual svg{position:absolute;inset:0;width:100%;height:100%;}
+  .intro-text h2{font-size:30px;margin-bottom:24px;}
+  .intro-text p{color:var(--text-soft);font-size:15.5px;margin-bottom:16px;}
+
+  /* ---------- Services ---------- */
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .service-card{background:var(--white);padding:44px 38px;}
+  .service-card .num{font-family:var(--serif);font-size:14px;color:var(--gold);letter-spacing:0.08em;display:block;margin-bottom:22px;}
+  .service-card h3{font-size:19px;margin-bottom:14px;line-height:1.6;}
+  .service-card p{font-size:14px;color:var(--text-soft);}
+
+  /* ---------- Why grids (icons as marks, not numbered since not sequence) ---------- */
+  .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:48px 64px;}
+  .why-item{display:flex;gap:22px;border-top:1px solid var(--line);padding-top:22px;}
+  .why-item .mark{
+    font-family:var(--serif);font-size:20px;color:var(--gold);flex-shrink:0;width:38px;
+  }
+  .why-item h4{font-size:17px;margin-bottom:8px;color:var(--navy);}
+  .why-item p{font-size:14px;color:var(--text-soft);}
+
+  .bg-navy .why-item{border-top-color:var(--line-light);}
+  .bg-navy .why-item p{color:rgba(255,255,255,0.68);}
+  .bg-navy .section-head p.lead{color:rgba(255,255,255,0.68);}
+
+  /* ---------- Process (true sequence -> numbered) ---------- */
+  .process-list{display:flex;flex-direction:column;}
+  .process-step{
+    display:grid;grid-template-columns:90px 1fr;gap:32px;padding:32px 0;
+    border-bottom:1px solid var(--line);align-items:start;
+  }
+  .process-step:first-child{border-top:1px solid var(--line);}
+  .process-step .step-num{font-family:var(--serif);font-size:32px;color:var(--gold);}
+  .process-step h4{font-size:18px;margin-bottom:8px;}
+  .process-step p{font-size:14px;color:var(--text-soft);max-width:600px;}
+
+  /* ---------- SSW section ---------- */
+  .ssw-wrap{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start;}
+  .ssw-copy h2{font-size:30px;margin-bottom:20px;}
+  .ssw-copy p{color:var(--text-soft);font-size:15px;margin-bottom:18px;}
+  .ssw-sectors{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+  .ssw-sectors span{
+    font-size:12.5px;border:1px solid var(--line);padding:8px 14px;color:var(--text-soft);
+    border-radius:2px;
+  }
+  .ssw-support-box{background:var(--off-white);border:1px solid var(--line);padding:40px;}
+  .ssw-support-box h3{font-size:18px;margin-bottom:20px;}
+  .ssw-support-box li{
+    font-size:14px;color:var(--text-soft);padding:12px 0;border-top:1px solid var(--line);
+  }
+  .ssw-support-box li:first-of-type{border-top:none;}
+
+  /* ---------- Jobs ---------- */
+  .jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:44px;}
+  .job-card{border:1px solid var(--line);padding:32px 28px;background:var(--white);}
+  .job-card .job-tag{font-size:11.5px;letter-spacing:0.08em;color:var(--burgundy);margin-bottom:14px;display:block;}
+  .job-card h4{font-size:17px;margin-bottom:10px;color:var(--navy);}
+  .job-card p{font-size:13.5px;color:var(--text-soft);margin-bottom:18px;}
+  .job-card .job-meta{font-size:12.5px;color:var(--text-soft);border-top:1px solid var(--line);padding-top:14px;}
+  .jobs-footer{text-align:center;}
+
+  /* ---------- CTA banners ---------- */
+  .cta-banner{
+    display:grid;grid-template-columns:1.3fr auto;gap:40px;align-items:center;
+    background:var(--navy);color:var(--white);padding:56px 60px;
+  }
+  .cta-banner.burgundy{background:var(--burgundy);}
+  .cta-banner h3{color:var(--white);font-size:24px;margin-bottom:10px;}
+  .cta-banner p{color:rgba(255,255,255,0.78);font-size:14.5px;}
+  .cta-banner .btn{white-space:nowrap;}
+
+  .cta-stack{display:flex;flex-direction:column;gap:26px;}
+
+  /* ---------- News ---------- */
+  .news-list{border-top:1px solid var(--line);}
+  .news-item{
+    display:grid;grid-template-columns:120px 100px 1fr;gap:26px;padding:26px 0;
+    border-bottom:1px solid var(--line);align-items:baseline;
+  }
+  .news-item .news-date{font-size:13px;color:var(--text-soft);font-family:var(--serif);}
+  .news-item .news-cat{font-size:11.5px;color:var(--burgundy);letter-spacing:0.06em;}
+  .news-item .news-title{font-size:15px;color:var(--navy);}
+
+  /* ---------- Final CTA ---------- */
+  .final-cta{
+    background:var(--navy-deep);color:var(--white);padding:120px 0;text-align:center;
+    position:relative;
+  }
+  .final-cta h2{color:var(--white);font-size:32px;max-width:640px;margin:0 auto 20px;}
+  .final-cta p{color:rgba(255,255,255,0.72);max-width:520px;margin:0 auto 40px;font-size:15px;}
+  .final-cta .hero-actions{justify-content:center;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--navy-deep);color:rgba(255,255,255,0.62);padding:80px 0 34px;font-size:13.5px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:50px;padding-bottom:56px;border-bottom:1px solid var(--line-light);}
+  .footer-brand .logo{color:var(--white);margin-bottom:16px;}
+  .footer-brand p{max-width:280px;line-height:1.8;}
+  .footer-col h5{color:var(--white);font-size:13px;letter-spacing:0.05em;margin-bottom:18px;font-weight:600;}
+  .footer-col a{display:block;padding:6px 0;color:rgba(255,255,255,0.62);}
+  .footer-col a:hover{color:var(--gold);}
+  .footer-bottom{
+    display:flex;justify-content:space-between;padding-top:28px;font-size:12.5px;
+    color:rgba(255,255,255,0.4);flex-wrap:wrap;gap:12px;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:960px){
+    nav.primary-nav{display:none;}
+    .hamburger{display:flex;}
+    .selection-grid,.services-grid,.jobs-grid,.footer-grid{grid-template-columns:1fr;}
+    .why-grid{grid-template-columns:1fr;}
+    .intro,.ssw-wrap{grid-template-columns:1fr;}
+    .intro-visual{aspect-ratio:16/9;}
+    .cta-banner{grid-template-columns:1fr;text-align:left;padding:40px 32px;}
+    .news-item{grid-template-columns:1fr;gap:6px;}
+    .hero h1{font-size:32px;}
+    .section{padding:76px 0;}
+    .selection{padding:76px 0;}
+  }
+</style>
 </head>
 <body>
 
-    <h1>Message</h1>
+<header>
+  <div class="header-inner">
+    <a href="#top" class="logo">[COMPANY NAME]</a>
+    <nav class="primary-nav">
+      <a href="#about" class="i18n" data-ja="私たちについて" data-en="About Us">私たちについて</a>
+      <a href="#services" class="i18n" data-ja="サービス" data-en="Services">サービス</a>
+      <a href="#for-companies" class="i18n" data-ja="企業の皆様へ" data-en="For Companies">企業の皆様へ</a>
+      <a href="#for-jobseekers" class="i18n" data-ja="求職者の皆様へ" data-en="For Job Seekers">求職者の皆様へ</a>
+      <a href="#ssw" class="i18n" data-ja="特定技能" data-en="Specified Skilled Worker">特定技能</a>
+      <a href="#jobs" class="i18n" data-ja="求人情報" data-en="Job Openings">求人情報</a>
+      <a href="#news" class="i18n" data-ja="お知らせ" data-en="News">お知らせ</a>
+      <a href="#contact" class="i18n" data-ja="お問い合わせ" data-en="Contact">お問い合わせ</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-switch">
+        <button type="button" data-lang-btn="ja" class="active">JP</button>
+        <span class="sep">|</span>
+        <button type="button" data-lang-btn="en">EN</button>
+      </div>
+      <a href="#contact" class="btn btn-solid btn-sm i18n" data-ja="無料相談" data-en="Free Consultation">無料相談</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#about" class="i18n" data-ja="私たちについて" data-en="About Us">私たちについて</a>
+    <a href="#services" class="i18n" data-ja="サービス" data-en="Services">サービス</a>
+    <a href="#for-companies" class="i18n" data-ja="企業の皆様へ" data-en="For Companies">企業の皆様へ</a>
+    <a href="#for-jobseekers" class="i18n" data-ja="求職者の皆様へ" data-en="For Job Seekers">求職者の皆様へ</a>
+    <a href="#ssw" class="i18n" data-ja="特定技能" data-en="Specified Skilled Worker">特定技能</a>
+    <a href="#jobs" class="i18n" data-ja="求人情報" data-en="Job Openings">求人情報</a>
+    <a href="#news" class="i18n" data-ja="お知らせ" data-en="News">お知らせ</a>
+    <a href="#contact" class="i18n" data-ja="お問い合わせ" data-en="Contact">お問い合わせ</a>
+    <a href="#contact" class="btn btn-solid i18n" data-ja="無料相談" data-en="Free Consultation">無料相談</a>
+  </div>
+</header>
 
-    <p id="message">aHR0cHM6Ly94LmNvbS9TcDFyaXRGeXJl</p>
+<main id="top">
 
-    <button onclick="decodeMessage()">Reveal Message</button>
+  <!-- 8. HERO -->
+  <section class="hero">
+    <div class="hero-bg-motif"></div>
+    <svg class="hero-motif-svg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 380 L90 260 L150 320 L230 190 L310 300 L380 230 L500 360" stroke="#AD8A55" stroke-width="1.4" opacity="0.55"/>
+      <path d="M0 420 L110 300 L180 350 L260 230 L330 330 L410 260 L500 400" stroke="#AD8A55" stroke-width="1.4" opacity="0.3"/>
+      <circle cx="380" cy="120" r="46" stroke="#AD8A55" stroke-width="1.2" opacity="0.5"/>
+    </svg>
+    <div class="container">
+      <div class="hero-inner">
+        <span class="eyebrow-mark"></span>
+        <h1 class="i18n" data-ja="日本とネパールを、人と信頼でつなぐ。" data-en="Connecting Japan and Nepal through People and Trust.">日本とネパールを、人と信頼でつなぐ。</h1>
+        <p class="hero-lead i18n" data-ja="ネパール人材の採用・通訳・コミュニケーションを通じて、日本企業と人材のより良い関係づくりをサポートします。" data-en="We support Japanese companies and Nepalese talent through recruitment coordination, interpretation, communication, and practical support.">ネパール人材の採用・通訳・コミュニケーションを通じて、日本企業と人材のより良い関係づくりをサポートします。</p>
+        <p class="hero-sub i18n" data-ja="採用だけではなく、出会いから定着まで。" data-en="More Than Recruitment — From First Connection to Long-Term Success.">採用だけではなく、出会いから定着まで。</p>
+        <div class="hero-actions">
+          <a href="#for-companies" class="btn btn-ghost-light i18n" data-ja="企業の方はこちら" data-en="For Companies">企業の方はこちら</a>
+          <a href="#for-jobseekers" class="btn btn-ghost-light i18n" data-ja="求職者の方はこちら" data-en="For Job Seekers">求職者の方はこちら</a>
+          <a href="#contact" class="btn btn-solid i18n" data-ja="無料相談" data-en="Free Consultation">無料相談</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        function decodeMessage() {
-            const encoded = "aHR0cHM6Ly94LmNvbS9TcDFyaXRGeXJl";
-            const decoded = atob(encoded);
-            document.getElementById("message").innerText = decoded;
-        }
-    </script>
+  <!-- 9. TRUST MESSAGE -->
+  <div class="trust-band">
+    <p class="i18n" data-ja="日本企業 × ネパール人材 × 信頼できるコミュニケーション" data-en="Japanese Companies × Nepalese Talent × Trusted Communication">日本企業 × ネパール人材 × 信頼できるコミュニケーション</p>
+  </div>
+
+  <!-- 10. COMPANY / JOB SEEKER SELECTION -->
+  <section class="selection">
+    <div class="container">
+      <div class="selection-grid">
+        <div class="selection-card" id="for-companies">
+          <span class="tag i18n" data-ja="企業の皆様へ" data-en="For Companies">企業の皆様へ</span>
+          <h3 class="i18n" data-ja="企業の皆様へ" data-en="For Companies">企業の皆様へ</h3>
+          <p class="i18n" data-ja="ネパール人材の採用・コミュニケーションについて、お気軽にご相談ください。" data-en="Looking to recruit or work with Nepalese talent? Let's discuss your needs.">ネパール人材の採用・コミュニケーションについて、お気軽にご相談ください。</p>
+          <a href="#contact" class="btn i18n" data-ja="企業向け無料相談" data-en="Talk to Us">企業向け無料相談</a>
+        </div>
+        <div class="selection-card" id="for-jobseekers">
+          <span class="tag i18n" data-ja="求職者の皆様へ" data-en="For Job Seekers">求職者の皆様へ</span>
+          <h3 class="i18n" data-ja="求職者の皆様へ" data-en="For Job Seekers">求職者の皆様へ</h3>
+          <p class="i18n" data-ja="日本での仕事探しやキャリアについてご相談ください。" data-en="Explore employment opportunities and get career-related support in Japan.">日本での仕事探しやキャリアについてご相談ください。</p>
+          <a href="#jobs" class="btn i18n" data-ja="求人を見る" data-en="Explore Jobs">求人を見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. INTRODUCTION -->
+  <section class="section bg-off" id="about">
+    <div class="container">
+      <div class="intro">
+        <div class="intro-visual">
+          <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="500" fill="#EDE7D8"/>
+            <path d="M-20 340 C 80 300, 140 380, 200 320 C 260 260, 320 340, 420 300" stroke="#7C2833" stroke-width="1.4" fill="none" opacity="0.55"/>
+            <path d="M-20 380 C 90 350, 150 410, 210 360 C 270 310, 330 380, 420 350" stroke="#152239" stroke-width="1.4" fill="none" opacity="0.4"/>
+            <circle cx="120" cy="150" r="3" fill="#AD8A55"/>
+            <circle cx="270" cy="120" r="3" fill="#AD8A55"/>
+            <line x1="120" y1="150" x2="270" y2="120" stroke="#AD8A55" stroke-width="1"/>
+            <circle cx="195" cy="200" r="3" fill="#7C2833"/>
+            <line x1="120" y1="150" x2="195" y2="200" stroke="#AD8A55" stroke-width="1" opacity="0.6"/>
+            <line x1="270" y1="120" x2="195" y2="200" stroke="#AD8A55" stroke-width="1" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="intro-text">
+          <span class="eyebrow-mark"></span>
+          <h2 class="i18n" data-ja="日本企業とネパール人材の架け橋に。" data-en="A Bridge Between Japanese Companies and Nepalese Talent.">日本企業とネパール人材の架け橋に。</h2>
+          <p class="i18n" data-ja="私たちは、単に人材をつなぐだけではなく、日本企業とネパール人材の間にある言語・文化・コミュニケーションの壁を減らし、長く信頼される関係づくりを大切にしています。" data-en="We do more than connect people with jobs. We aim to reduce language, cultural, and communication barriers between Japanese companies and Nepalese talent and build relationships based on long-term trust.">私たちは、単に人材をつなぐだけではなく、日本企業とネパール人材の間にある言語・文化・コミュニケーションの壁を減らし、長く信頼される関係づくりを大切にしています。</p>
+          <p class="i18n" data-ja="採用の瞬間だけでなく、入社後の定着まで一貫して伴走することが、私たちの役割だと考えています。" data-en="We believe our role extends beyond the moment of hiring — we stay engaged through onboarding and long after, supporting retention every step of the way.">採用の瞬間だけでなく、入社後の定着まで一貫して伴走することが、私たちの役割だと考えています。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. SERVICES -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow-mark"></span>
+        <h2 class="i18n" data-ja="私たちのサービス" data-en="Our Services">私たちのサービス</h2>
+        <p class="lead i18n" data-ja="採用から定着まで、日本企業とネパール人材双方に寄り添う一貫したサポートを提供します。" data-en="From recruitment to retention, we provide consistent, hands-on support for both Japanese companies and Nepalese talent.">採用から定着まで、日本企業とネパール人材双方に寄り添う一貫したサポートを提供します。</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="num">01</span>
+          <h3 class="i18n" data-ja="人材紹介・採用サポート" data-en="Recruitment &amp; Hiring Support">人材紹介・採用サポート</h3>
+          <p class="i18n" data-ja="貴社の求める人物像に基づき、ネパールの人材データベースから最適な候補者を選定・ご紹介します。" data-en="We select and introduce candidates from our Nepal talent network, matched to the profile your company needs.">貴社の求める人物像に基づき、ネパールの人材データベースから最適な候補者を選定・ご紹介します。</p>
+        </div>
+        <div class="service-card">
+          <span class="num">02</span>
+          <h3 class="i18n" data-ja="特定技能ビザ申請サポート" data-en="Specified Skilled Worker Visa Support">特定技能ビザ申請サポート</h3>
+          <p class="i18n" data-ja="登録支援機関として、在留資格申請から各種書類作成まで、煩雑な手続きを一貫してサポートします。" data-en="As a Registered Support Organization, we handle the visa application process and documentation from start to finish.">登録支援機関として、在留資格申請から各種書類作成まで、煩雑な手続きを一貫してサポートします。</p>
+        </div>
+        <div class="service-card">
+          <span class="num">03</span>
+          <h3 class="i18n" data-ja="通訳・翻訳サービス" data-en="Interpretation &amp; Translation">通訳・翻訳サービス</h3>
+          <p class="i18n" data-ja="面接や職場でのコミュニケーションを、ネパール語・日本語のバイリンガルスタッフが橋渡しします。" data-en="Our bilingual staff bridge interviews and day-to-day workplace communication between Japanese and Nepali.">面接や職場でのコミュニケーションを、ネパール語・日本語のバイリンガルスタッフが橋渡しします。</p>
+        </div>
+        <div class="service-card">
+          <span class="num">04</span>
+          <h3 class="i18n" data-ja="生活サポート・定着支援" data-en="Life Support &amp; Retention">生活サポート・定着支援</h3>
+          <p class="i18n" data-ja="住居手配や役所手続き、生活相談まで、来日後の暮らしを支え、長期的な定着につなげます。" data-en="From housing to municipal procedures and everyday concerns, we support life after arrival to encourage long-term retention.">住居手配や役所手続き、生活相談まで、来日後の暮らしを支え、長期的な定着につなげます。</p>
+        </div>
+        <div class="service-card">
+          <span class="num">05</span>
+          <h3 class="i18n" data-ja="日本語教育・研修" data-en="Japanese Language Training">日本語教育・研修</h3>
+          <p class="i18n" data-ja="来日前・来日後の日本語研修や、業種別のマナー研修を実施し、即戦力としての活躍を後押しします。" data-en="We provide pre- and post-arrival Japanese language training and industry-specific workplace orientation.">来日前・来日後の日本語研修や、業種別のマナー研修を実施し、即戦力としての活躍を後押しします。</p>
+        </div>
+        <div class="service-card">
+          <span class="num">06</span>
+          <h3 class="i18n" data-ja="企業向けコンサルティング" data-en="Corporate Consulting">企業向けコンサルティング</h3>
+          <p class="i18n" data-ja="外国人材の受け入れ体制構築や社内制度づくりについて、豊富な実績に基づきご提案します。" data-en="We advise on building internal systems and processes for accepting foreign workers, drawing on extensive experience.">外国人材の受け入れ体制構築や社内制度づくりについて、豊富な実績に基づきご提案します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. WHY NEPALESE TALENT -->
+  <section class="section bg-navy">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow-mark"></span>
+        <h2 class="i18n" data-ja="なぜネパール人材なのか" data-en="Why Nepalese Talent">なぜネパール人材なのか</h2>
+        <p class="lead i18n" data-ja="ネパールは、日本企業にとって将来性のある人材供給国のひとつです。" data-en="Nepal is one of the most promising sources of talent for Japanese companies today.">ネパールは、日本企業にとって将来性のある人材供給国のひとつです。</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-item">
+          <span class="mark">壱</span>
+          <div>
+            <h4 class="i18n" data-ja="真面目で勤勉な国民性" data-en="A Diligent, Hardworking National Character">真面目で勤勉な国民性</h4>
+            <p class="i18n" data-ja="責任感が強く、指示に対して誠実に取り組む姿勢は、多くの受け入れ企業から高く評価されています。" data-en="A strong sense of responsibility and sincere attitude toward assigned work are consistently praised by host companies.">責任感が強く、指示に対して誠実に取り組む姿勢は、多くの受け入れ企業から高く評価されています。</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="mark">弐</span>
+          <div>
+            <h4 class="i18n" data-ja="若く豊富な労働人口" data-en="A Young, Abundant Workforce">若く豊富な労働人口</h4>
+            <p class="i18n" data-ja="平均年齢が若く、今後も長期にわたり働き手を安定的に確保できる人口構成を持っています。" data-en="With a young average age, Nepal offers a demographic structure that can supply a stable workforce for years to come.">平均年齢が若く、今後も長期にわたり働き手を安定的に確保できる人口構成を持っています。</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="mark">参</span>
+          <div>
+            <h4 class="i18n" data-ja="親日的な国民感情" data-en="A Nation Favorable Toward Japan">親日的な国民感情</h4>
+            <p class="i18n" data-ja="日本の文化や社会に対する関心・敬意が高く、就労を通じた円滑な適応が期待できます。" data-en="Strong interest in and respect for Japanese culture and society supports smooth adaptation after arrival.">日本の文化や社会に対する関心・敬意が高く、就労を通じた円滑な適応が期待できます。</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="mark">四</span>
+          <div>
+            <h4 class="i18n" data-ja="広がる日本語学習環境" data-en="A Growing Japanese-Language Education Base">広がる日本語学習環境</h4>
+            <p class="i18n" data-ja="現地の日本語学校が増加しており、一定の語学力を備えた人材が着実に育っています。" data-en="A growing number of local Japanese-language schools are steadily producing candidates with solid language ability.">現地の日本語学校が増加しており、一定の語学力を備えた人材が着実に育っています。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. WHY CHOOSE US -->
+  <section class="section bg-off">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow-mark"></span>
+        <h2 class="i18n" data-ja="私たちが選ばれる理由" data-en="Why Choose Us">私たちが選ばれる理由</h2>
+        <p class="lead i18n" data-ja="日本とネパール双方に拠点を持ち、現地から定着後までを一気通貫でサポートします。" data-en="With a presence in both Japan and Nepal, we provide seamless, end-to-end support from sourcing through retention.">日本とネパール双方に拠点を持ち、現地から定着後までを一気通貫でサポートします。</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-item">
+          <span class="mark">A</span>
+          <div>
+            <h4 class="i18n" data-ja="日本・ネパール双方に拠点" data-en="Local Presence in Both Countries">日本・ネパール双方に拠点</h4>
+            <p class="i18n" data-ja="現地での候補者選定から日本国内での定着支援まで、一貫した体制で対応します。" data-en="From candidate sourcing on the ground in Nepal to retention support in Japan, we operate as one consistent team.">現地での候補者選定から日本国内での定着支援まで、一貫した体制で対応します。</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="mark">B</span>
+          <div>
+            <h4 class="i18n" data-ja="バイリンガルスタッフによる支援" data-en="Support From Bilingual Staff">バイリンガルスタッフによる支援</h4>
+            <p class="i18n" data-ja="日本語・ネパール語に精通したスタッフが、採用から日々の業務まで丁寧に橋渡しします。" data-en="Staff fluent in both Japanese and Nepali carefully bridge everything from hiring to daily operations.">日本語・ネパール語に精通したスタッフが、採用から日々の業務まで丁寧に橋渡しします。</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="mark">C</span>
+          <div>
+            <h4 class="i18n" data-ja="登録支援機関としての実績" data-en="Registered Support Organization Track Record">登録支援機関としての実績</h4>
+            <p class="i18n" data-ja="特定技能制度に関する専門知識と実績を持ち、コンプライアンスを重視した運営を行っています。" data-en="With specialist knowledge and a track record under the Specified Skilled Worker system, we operate with a strong focus on compliance.">特定技能制度に関する専門知識と実績を持ち、コンプライアンスを重視した運営を行っています。</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="mark">D</span>
+          <div>
+            <h4 class="i18n" data-ja="採用後も続く長期的な関係" data-en="A Long-Term Relationship Beyond Hiring">採用後も続く長期的な関係</h4>
+            <p class="i18n" data-ja="人材の紹介で終わらせず、企業・人材双方と長く信頼関係を築くことを大切にしています。" data-en="We don't stop at introductions — we focus on building lasting trust with both companies and talent alike.">人材の紹介で終わらせず、企業・人材双方と長く信頼関係を築くことを大切にしています。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. RECRUITMENT PROCESS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow-mark"></span>
+        <h2 class="i18n" data-ja="採用の流れ" data-en="Recruitment Process">採用の流れ</h2>
+        <p class="lead i18n" data-ja="ご相談から入社後の定着まで、専任スタッフが一貫してサポートします。" data-en="From initial consultation to post-hire retention, a dedicated team supports you through every stage.">ご相談から入社後の定着まで、専任スタッフが一貫してサポートします。</p>
+      </div>
+      <div class="process-list">
+        <div class="process-step">
+          <span class="step-num">01</span>
+          <div>
+            <h4 class="i18n" data-ja="無料相談・ヒアリング" data-en="Free Consultation &amp; Requirements">無料相談・ヒアリング</h4>
+            <p class="i18n" data-ja="貴社の業種や求める人物像、採用時期などを丁寧にお伺いします。" data-en="We carefully discuss your industry, ideal candidate profile, and hiring timeline.">貴社の業種や求める人物像、採用時期などを丁寧にお伺いします。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <span class="step-num">02</span>
+          <div>
+            <h4 class="i18n" data-ja="候補者の選定・ご紹介" data-en="Candidate Matching &amp; Introduction">候補者の選定・ご紹介</h4>
+            <p class="i18n" data-ja="ネパール国内の人材データベースから、条件に合う候補者を選定しご紹介します。" data-en="We select candidates matching your criteria from our talent network in Nepal and present them to you.">ネパール国内の人材データベースから、条件に合う候補者を選定しご紹介します。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <span class="step-num">03</span>
+          <div>
+            <h4 class="i18n" data-ja="面接コーディネート" data-en="Interview Coordination">面接コーディネート</h4>
+            <p class="i18n" data-ja="オンライン・対面いずれの面接も、通訳を交えてスムーズに実施します。" data-en="We coordinate both online and in-person interviews, with interpretation for smooth communication.">オンライン・対面いずれの面接も、通訳を交えてスムーズに実施します。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <span class="step-num">04</span>
+          <div>
+            <h4 class="i18n" data-ja="ビザ申請・書類手続き" data-en="Visa Application &amp; Documentation">ビザ申請・書類手続き</h4>
+            <p class="i18n" data-ja="在留資格認定に必要な書類作成から申請まで、専門スタッフが代行・サポートします。" data-en="Our specialists prepare and manage the documentation required for status of residence certification.">在留資格認定に必要な書類作成から申請まで、専門スタッフが代行・サポートします。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <span class="step-num">05</span>
+          <div>
+            <h4 class="i18n" data-ja="来日前研修" data-en="Pre-Departure Training">来日前研修</h4>
+            <p class="i18n" data-ja="日本語研修や生活マナー研修を実施し、来日後スムーズに業務へ入れるよう準備します。" data-en="We conduct Japanese language and workplace orientation training so candidates are ready to start smoothly.">日本語研修や生活マナー研修を実施し、来日後スムーズに業務へ入れるよう準備します。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <span class="step-num">06</span>
+          <div>
+            <h4 class="i18n" data-ja="来日・入社サポート" data-en="Arrival &amp; Onboarding Support">来日・入社サポート</h4>
+            <p class="i18n" data-ja="空港出迎えから住居手配、役所手続きまで、来日直後の生活立ち上げを支援します。" data-en="From airport pickup to housing arrangements and municipal registration, we support the initial settling-in period.">空港出迎えから住居手配、役所手続きまで、来日直後の生活立ち上げを支援します。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <span class="step-num">07</span>
+          <div>
+            <h4 class="i18n" data-ja="定着支援・アフターフォロー" data-en="Ongoing Retention Support">定着支援・アフターフォロー</h4>
+            <p class="i18n" data-ja="入社後も定期的な面談を実施し、企業・人材双方が安心して長く働ける環境をサポートします。" data-en="We conduct regular check-ins after hiring to help both the company and the employee sustain a long, comfortable working relationship.">入社後も定期的な面談を実施し、企業・人材双方が安心して長く働ける環境をサポートします。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. SPECIFIED SKILLED WORKER -->
+  <section class="section bg-off" id="ssw">
+    <div class="container">
+      <div class="ssw-wrap">
+        <div class="ssw-copy">
+          <span class="eyebrow-mark"></span>
+          <h2 class="i18n" data-ja="特定技能制度について" data-en="About the Specified Skilled Worker System">特定技能制度について</h2>
+          <p class="i18n" data-ja="特定技能は、人手不足が深刻な分野において、一定の専門性・技能を持つ外国人材を受け入れるための在留資格です。" data-en="Specified Skilled Worker is a status of residence that allows companies in sectors facing serious labor shortages to accept foreign workers with a defined level of expertise and skill.">特定技能は、人手不足が深刻な分野において、一定の専門性・技能を持つ外国人材を受け入れるための在留資格です。</p>
+          <p class="i18n" data-ja="私たちは登録支援機関として、受け入れ企業様の義務的支援を代行し、制度対応の負担を大きく軽減します。" data-en="As a Registered Support Organization, we carry out the mandatory support obligations on behalf of accepting companies, significantly reducing the administrative burden of the system.">私たちは登録支援機関として、受け入れ企業様の義務的支援を代行し、制度対応の負担を大きく軽減します。</p>
+          <div class="ssw-sectors">
+            <span class="i18n" data-ja="介護" data-en="Nursing Care">介護</span>
+            <span class="i18n" data-ja="ビルクリーニング" data-en="Building Cleaning">ビルクリーニング</span>
+            <span class="i18n" data-ja="製造業" data-en="Manufacturing">製造業</span>
+            <span class="i18n" data-ja="建設" data-en="Construction">建設</span>
+            <span class="i18n" data-ja="造船・舶用工業" data-en="Shipbuilding">造船・舶用工業</span>
+            <span class="i18n" data-ja="自動車整備" data-en="Automobile Maintenance">自動車整備</span>
+            <span class="i18n" data-ja="航空" data-en="Aviation">航空</span>
+            <span class="i18n" data-ja="宿泊" data-en="Accommodation">宿泊</span>
+            <span class="i18n" data-ja="農業" data-en="Agriculture">農業</span>
+            <span class="i18n" data-ja="漁業" data-en="Fishery">漁業</span>
+            <span class="i18n" data-ja="飲食料品製造業" data-en="Food &amp; Beverage Manufacturing">飲食料品製造業</span>
+            <span class="i18n" data-ja="外食業" data-en="Food Service">外食業</span>
+          </div>
+        </div>
+        <div class="ssw-support-box">
+          <h3 class="i18n" data-ja="登録支援機関としての支援内容" data-en="Our Support as a Registered Support Organization">登録支援機関としての支援内容</h3>
+          <ul>
+            <li class="i18n" data-ja="事前ガイダンス・生活オリエンテーション" data-en="Pre-employment guidance and life orientation">事前ガイダンス・生活オリエンテーション</li>
+            <li class="i18n" data-ja="住居確保・生活に必要な契約の補助" data-en="Housing arrangements and support for essential contracts">住居確保・生活に必要な契約の補助</li>
+            <li class="i18n" data-ja="公的手続きへの同行" data-en="Accompaniment for official procedures">公的手続きへの同行</li>
+            <li class="i18n" data-ja="日本語学習の機会提供" data-en="Opportunities for Japanese language learning">日本語学習の機会提供</li>
+            <li class="i18n" data-ja="相談・苦情への対応" data-en="Handling consultations and grievances">相談・苦情への対応</li>
+            <li class="i18n" data-ja="定期的な面談・行政機関への通報" data-en="Regular interviews and reporting to authorities">定期的な面談・行政機関への通報</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. CURRENT JOBS -->
+  <section class="section" id="jobs">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow-mark"></span>
+        <h2 class="i18n" data-ja="求人情報" data-en="Current Openings">求人情報</h2>
+        <p class="lead i18n" data-ja="現在募集中の求人の一部をご紹介します。詳細はお問い合わせください。" data-en="A selection of current openings is shown below. Contact us for full details.">現在募集中の求人の一部をご紹介します。詳細はお問い合わせください。</p>
+      </div>
+      <div class="jobs-grid">
+        <div class="job-card">
+          <span class="job-tag i18n" data-ja="介護" data-en="Nursing Care">介護</span>
+          <h4 class="i18n" data-ja="介護施設スタッフ（特定技能）" data-en="Care Facility Staff (Specified Skilled Worker)">介護施設スタッフ（特定技能）</h4>
+          <p class="i18n" data-ja="関東エリアの介護施設にて、入居者様の生活支援を行う業務です。" data-en="Supporting residents' daily living at a care facility in the Kanto region.">関東エリアの介護施設にて、入居者様の生活支援を行う業務です。</p>
+          <div class="job-meta i18n" data-ja="勤務地：関東エリア｜雇用形態：正社員" data-en="Location: Kanto Region | Employment: Full-time">勤務地：関東エリア｜雇用形態：正社員</div>
+        </div>
+        <div class="job-card">
+          <span class="job-tag i18n" data-ja="宿泊" data-en="Hospitality">宿泊</span>
+          <h4 class="i18n" data-ja="ホテルスタッフ（特定技能）" data-en="Hotel Staff (Specified Skilled Worker)">ホテルスタッフ（特定技能）</h4>
+          <p class="i18n" data-ja="フロント対応や客室管理など、ホテル運営全般を担当していただきます。" data-en="Front desk service and housekeeping operations at a hotel property.">フロント対応や客室管理など、ホテル運営全般を担当していただきます。</p>
+          <div class="job-meta i18n" data-ja="勤務地：関西エリア｜雇用形態：正社員" data-en="Location: Kansai Region | Employment: Full-time">勤務地：関西エリア｜雇用形態：正社員</div>
+        </div>
+        <div class="job-card">
+          <span class="job-tag i18n" data-ja="製造業" data-en="Manufacturing">製造業</span>
+          <h4 class="i18n" data-ja="食品製造スタッフ（特定技能）" data-en="Food Manufacturing Staff (Specified Skilled Worker)">食品製造スタッフ（特定技能）</h4>
+          <p class="i18n" data-ja="食品工場での製造・検品業務です。未経験からでも研修体制が整っています。" data-en="Production and inspection work at a food manufacturing plant, with training support for those new to the role.">食品工場での製造・検品業務です。未経験からでも研修体制が整っています。</p>
+          <div class="job-meta i18n" data-ja="勤務地：中部エリア｜雇用形態：正社員" data-en="Location: Chubu Region | Employment: Full-time">勤務地：中部エリア｜雇用形態：正社員</div>
+        </div>
+      </div>
+      <div class="jobs-footer">
+        <a href="#contact" class="btn i18n" data-ja="すべての求人を見る" data-en="View All Openings">すべての求人を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. COMPANY CTA -->
+  <section class="section bg-off">
+    <div class="container">
+      <div class="cta-stack">
+        <div class="cta-banner">
+          <div>
+            <h3 class="i18n" data-ja="ネパール人材の採用をご検討の企業様へ" data-en="For Companies Considering Nepalese Talent">ネパール人材の採用をご検討の企業様へ</h3>
+            <p class="i18n" data-ja="制度対応から通訳、定着支援まで、専任スタッフが丁寧にサポートします。まずはお気軽にご相談ください。" data-en="From regulatory compliance to interpretation and retention support, our dedicated team is here to help. Start with a free consultation.">制度対応から通訳、定着支援まで、専任スタッフが丁寧にサポートします。まずはお気軽にご相談ください。</p>
+          </div>
+          <a href="#contact" class="btn btn-solid i18n" data-ja="無料相談を申し込む" data-en="Request a Consultation">無料相談を申し込む</a>
+        </div>
+
+        <!-- 13. JOB SEEKER CTA -->
+        <div class="cta-banner burgundy" id="for-jobseekers-cta">
+          <div>
+            <h3 class="i18n" data-ja="日本での就労をお考えの皆様へ" data-en="For Those Considering Work in Japan">日本での就労をお考えの皆様へ</h3>
+            <p class="i18n" data-ja="求人紹介から生活面のサポートまで、あなたのキャリアを一緒に考えます。" data-en="From job introductions to everyday life support, we'll help you plan your career in Japan.">求人紹介から生活面のサポートまで、あなたのキャリアを一緒に考えます。</p>
+          </div>
+          <a href="#jobs" class="btn btn-ghost-light i18n" data-ja="求人情報を見る" data-en="View Job Openings">求人情報を見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. NEWS -->
+  <section class="section" id="news">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow-mark"></span>
+        <h2 class="i18n" data-ja="お知らせ" data-en="News">お知らせ</h2>
+      </div>
+      <div class="news-list">
+        <div class="news-item">
+          <span class="news-date">2026.08.20</span>
+          <span class="news-cat i18n" data-ja="お知らせ" data-en="Notice">お知らせ</span>
+          <span class="news-title i18n" data-ja="夏季休業のお知らせ（8月13日〜8月16日）" data-en="Notice of Summer Holiday (Aug 13–16)">夏季休業のお知らせ（8月13日〜8月16日）</span>
+        </div>
+        <div class="news-item">
+          <span class="news-date">2026.07.02</span>
+          <span class="news-cat i18n" data-ja="実績" data-en="Update">実績</span>
+          <span class="news-title i18n" data-ja="介護分野における特定技能人材の受け入れ実績が100名を突破しました" data-en="Our nursing care sector placements have surpassed 100 candidates">介護分野における特定技能人材の受け入れ実績が100名を突破しました</span>
+        </div>
+        <div class="news-item">
+          <span class="news-date">2026.05.15</span>
+          <span class="news-cat i18n" data-ja="セミナー" data-en="Seminar">セミナー</span>
+          <span class="news-title i18n" data-ja="特定技能制度に関する無料セミナーを開催しました" data-en="We hosted a free seminar on the Specified Skilled Worker system">特定技能制度に関する無料セミナーを開催しました</span>
+        </div>
+        <div class="news-item">
+          <span class="news-date">2026.03.01</span>
+          <span class="news-cat i18n" data-ja="お知らせ" data-en="Notice">お知らせ</span>
+          <span class="news-title i18n" data-ja="カトマンズオフィスを開設しました" data-en="We opened our Kathmandu office">カトマンズオフィスを開設しました</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. FINAL CTA -->
+  <section class="final-cta" id="contact">
+    <div class="container">
+      <span class="eyebrow-mark"></span>
+      <h2 class="i18n" data-ja="まずはお気軽にご相談ください。" data-en="Start With a Conversation.">まずはお気軽にご相談ください。</h2>
+      <p class="i18n" data-ja="採用のご相談、制度に関するご質問など、どんな内容でもお気軽にお問い合わせください。" data-en="Whether it's a hiring question or something about the system itself, we're happy to help — reach out anytime.">採用のご相談、制度に関するご質問など、どんな内容でもお気軽にお問い合わせください。</p>
+      <div class="hero-actions">
+        <a href="mailto:info@example.com" class="btn btn-solid i18n" data-ja="無料相談を申し込む" data-en="Request a Free Consultation">無料相談を申し込む</a>
+        <a href="#jobs" class="btn btn-ghost-light i18n" data-ja="求人情報を見る" data-en="View Job Openings">求人情報を見る</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 16. FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">[COMPANY NAME]</div>
+        <p class="i18n" data-ja="日本とネパールをつなぐ人材・サポートパートナー" data-en="Japan–Nepal Human Resources &amp; Support Partner">日本とネパールをつなぐ人材・サポートパートナー</p>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-ja="会社情報" data-en="Company">会社情報</h5>
+        <a href="#about" class="i18n" data-ja="私たちについて" data-en="About Us">私たちについて</a>
+        <a href="#services" class="i18n" data-ja="サービス" data-en="Services">サービス</a>
+        <a href="#news" class="i18n" data-ja="お知らせ" data-en="News">お知らせ</a>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-ja="ご利用の方へ" data-en="For You">ご利用の方へ</h5>
+        <a href="#for-companies" class="i18n" data-ja="企業の皆様へ" data-en="For Companies">企業の皆様へ</a>
+        <a href="#for-jobseekers" class="i18n" data-ja="求職者の皆様へ" data-en="For Job Seekers">求職者の皆様へ</a>
+        <a href="#ssw" class="i18n" data-ja="特定技能" data-en="Specified Skilled Worker">特定技能</a>
+        <a href="#jobs" class="i18n" data-ja="求人情報" data-en="Job Openings">求人情報</a>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-ja="お問い合わせ" data-en="Contact">お問い合わせ</h5>
+        <a href="mailto:info@example.com">info@example.com</a>
+        <a href="tel:+81000000000">+81 (0)00-0000-0000</a>
+        <a href="#" class="i18n" data-ja="所在地：東京都" data-en="Address: Tokyo, Japan">所在地：東京都</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="i18n" data-ja="© 2026 [COMPANY NAME]. All Rights Reserved." data-en="© 2026 [COMPANY NAME]. All Rights Reserved.">© 2026 [COMPANY NAME]. All Rights Reserved.</span>
+      <span class="i18n" data-ja="プライバシーポリシー" data-en="Privacy Policy">プライバシーポリシー</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Language toggle
+  const langBtns = document.querySelectorAll('[data-lang-btn]');
+  const i18nEls = document.querySelectorAll('.i18n');
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    i18nEls.forEach(el=>{
+      const val = el.getAttribute('data-'+lang);
+      if(val) el.innerHTML = val;
+    });
+    langBtns.forEach(b=> b.classList.toggle('active', b.dataset.langBtn===lang));
+  }
+  langBtns.forEach(b=> b.addEventListener('click', ()=> setLang(b.dataset.langBtn)));
+
+  // Mobile nav
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburgerBtn.addEventListener('click', ()=>{
+    mobileNav.classList.toggle('open');
+  });
+  mobileNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileNav.classList.remove('open')));
+
+  // Header shadow on scroll
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', ()=>{
+    header.style.boxShadow = window.scrollY > 8 ? '0 6px 20px rgba(21,34,57,0.06)' : 'none';
+  });
+</script>
 
 </body>
 </html>
